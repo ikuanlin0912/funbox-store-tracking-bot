@@ -21,6 +21,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # 拉取完整歷史以支援 git pull --rebase
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
