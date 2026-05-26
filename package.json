@@ -1,0 +1,14 @@
+{
+  "name": "funbox-store-tracking-bot",
+  "version": "1.0.0",
+  "description": "Funbox Toys 戰鬥陀螺上新與庫存 Telegram 監控 Bot",
+  "main": "funbox_monitor.js",
+  "scripts": {
+    "start": "node funbox_monitor.js",
+    "pm2": "pm2 start funbox_monitor.js --name \"funbox-beyblade\""
+  },
+  "dependencies": {
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7"
+  }
+}
