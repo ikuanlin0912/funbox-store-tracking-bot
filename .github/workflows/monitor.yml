@@ -5,6 +5,10 @@ on:
     - cron: '*/5 * * * *' # 每 5 分鐘運行一次 (GitHub Actions Cron)
   workflow_dispatch:       # 支援手動從 GitHub 網頁觸發
 
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true # 當前定時任務若有延遲重疊，自動取消舊任務，防止併發 Push
+
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true' # 啟用 Node.js 24 以消除 Deprecation 警告
 
@@ -51,7 +55,8 @@ jobs:
           # 僅在 SQLite 資料庫有變更時才 commit，避免腳本出錯
           if ! git diff --cached --quiet; then
             git commit -m "chore: update funbox_monitor.db database state [skip ci]"
-            git push
+            # 優先直接推送，若因併發衝突被拒，則拉取並自動選擇我們的 db 覆蓋後再次推送
+            git push || (git pull --rebase --strategy-option=theirs origin main && git push)
           else
             echo "No database changes detected."
           fi
