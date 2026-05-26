@@ -2,3 +2,4 @@ node_modules/
 *.log
 .env
 start_bot.bat
+funbox_monitor.db
