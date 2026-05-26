@@ -5,6 +5,9 @@ on:
     - cron: '*/5 * * * *' # 每 5 分鐘運行一次 (GitHub Actions Cron)
   workflow_dispatch:       # 支援手動從 GitHub 網頁觸發
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true' # 啟用 Node.js 24 以消除 Deprecation 警告
+
 permissions:
   contents: write          # 必須授予寫入權限以將 SQLite 資料庫變更 push 回 Repo
 
@@ -18,7 +21,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: 'npm'
 
       - name: Install dependencies
