@@ -55,8 +55,9 @@ jobs:
           # 僅在 SQLite 資料庫有變更時才 commit，避免腳本出錯
           if ! git diff --cached --quiet; then
             git commit -m "chore: update funbox_monitor.db database state [skip ci]"
-            # 優先直接推送，若因併發衝突被拒，則拉取並自動選擇我們的 db 覆蓋後再次推送
-            git push || (git pull --rebase --strategy-option=theirs origin main && git push)
+            # 每次 push 前主動拉取並 rebase（若有衝突則自動選擇我們的 db 覆蓋），防止因 set -e 導致 push 失敗後步驟直接中止
+            git pull --rebase --strategy-option=theirs origin main
+            git push
           else
             echo "No database changes detected."
           fi
